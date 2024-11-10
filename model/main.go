@@ -40,27 +40,27 @@ func CountTable(tableName string) (num int64) {
 func InitDB() (err error) {
 	var db *gorm.DB
 	if os.Getenv("SQL_DSN") != "" {
-		common.SysLog("using MySQL as database")
-		// Use MySQL
-		db, err = gorm.Open(mysql.Open(os.Getenv("SQL_DSN")), &gorm.Config{
-			PrepareStmt: true, // precompile SQL
-		})
-		// if strings.HasPrefix(os.Getenv("SQL_DSN"), "postgres://") {
-		// 	common.SysLog("SQL_DSN not set, using SQLite as database")
-        //     // Use PostgreSQL
-        //     db, err = gorm.Open(postgres.New(postgres.Config{
-		// 		DSN:                  os.Getenv("SQL_DSN"),
-		// 		PreferSimpleProtocol: true, // disables implicit prepared statement usage
-		// 	}), &gorm.Config{
-		// 		PrepareStmt: true, // precompile SQL
-		// 	})
-        // } else {
-		// 	common.SysLog("using MySQL as database")
-		// 	// Use MySQL
-		// 	db, err = gorm.Open(mysql.Open(os.Getenv("SQL_DSN")), &gorm.Config{
-		// 		PrepareStmt: true, // precompile SQL
-		// 	})
-		// }
+		// common.SysLog("using MySQL as database")
+		// // Use MySQL
+		// db, err = gorm.Open(mysql.Open(os.Getenv("SQL_DSN")), &gorm.Config{
+		// 	PrepareStmt: true, // precompile SQL
+		// })
+		if strings.HasPrefix(os.Getenv("SQL_DSN"), "postgres://") {
+			common.SysLog("SQL_DSN not set, using SQLite as database")
+            // Use PostgreSQL
+            db, err = gorm.Open(postgres.New(postgres.Config{
+				DSN:                  os.Getenv("SQL_DSN"),
+				PreferSimpleProtocol: true, // disables implicit prepared statement usage
+			}), &gorm.Config{
+				PrepareStmt: true, // precompile SQL
+			})
+        } else {
+			common.SysLog("using MySQL as database")
+			// Use MySQL
+			db, err = gorm.Open(mysql.Open(os.Getenv("SQL_DSN")), &gorm.Config{
+				PrepareStmt: true, // precompile SQL
+			})
+		}
 	
 	} else {
 		// Use SQLite
