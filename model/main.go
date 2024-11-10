@@ -40,11 +40,11 @@ func CountTable(tableName string) (num int64) {
 func InitDB() (err error) {
 	var db *gorm.DB
 	if os.Getenv("SQL_DSN") != "" {
-		if strings.HasPrefix(dsn, "postgres://") {
+		if strings.HasPrefix(os.Getenv("SQL_DSN"), "postgres://") {
 			common.SysLog("SQL_DSN not set, using SQLite as database")
             // Use PostgreSQL
             db, err = gorm.Open(postgres.New(postgres.Config{
-				DSN:                  dsn,
+				DSN:                  os.Getenv("SQL_DSN"),
 				PreferSimpleProtocol: true, // disables implicit prepared statement usage
 			}), &gorm.Config{
 				PrepareStmt: true, // precompile SQL
