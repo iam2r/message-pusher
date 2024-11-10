@@ -16,6 +16,7 @@ WORKDIR /build
 COPY . .
 COPY --from=builder /build/build ./web/build
 RUN go mod download
+RUN cat VERSION
 RUN go build -ldflags "-s -w -X 'message-pusher/common.Version=$(cat VERSION)' -extldflags '-static'" -o message-pusher
 
 FROM alpine
